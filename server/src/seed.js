@@ -1,0 +1,6 @@
+import 'dotenv/config';import mongoose from 'mongoose';import bcrypt from 'bcryptjs';import User from './models/User.js';import Room from './models/Room.js';
+await mongoose.connect(process.env.MONGO_URI||'mongodb://127.0.0.1:27017/roomly');
+const email='admin@roomly.local';if(!await User.findOne({email}))await User.create({name:'Roomly Admin',email,password:await bcrypt.hash('Admin123!',12),role:'admin'});
+const samples=[['Classic Queen','Standard','A calm, comfortable room for a city break.',3200,2,'101',['Wi-Fi','Air conditioning','Breakfast option']],['Deluxe King','Deluxe','Extra space with a king bed and lounge corner.',4800,2,'201',['Wi-Fi','King bed','Work desk']],['Family Retreat','Family','A flexible room for small families.',6200,4,'301',['Wi-Fi','Two beds','Mini fridge']],['Roomly Suite','Suite','A spacious suite with a separate sitting area.',8900,3,'401',['Wi-Fi','Living area','Premium toiletries']]];
+for(const [name,category,description,pricePerNight,capacity,roomNumber,amenities] of samples)if(!await Room.findOne({roomNumber}))await Room.create({name,category,description,pricePerNight,capacity,roomNumber,amenities,imageUrl:''});
+console.log('Seed complete. Admin: admin@roomly.local / Admin123!');await mongoose.disconnect();
